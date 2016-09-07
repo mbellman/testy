@@ -15,6 +15,7 @@
 	var PASS_COLOR = '#5c5';
 	var FAIL_COLOR = 'red';
 
+	var $output;
 	var describe_depth = 0;
 	var total_failures = 0;
 	var total_assertions = 0;
@@ -50,7 +51,7 @@
 	}
 
 	function print (output) {
-		document.write(output + br());
+		$output.innerHTML += (output + br());
 	}
 
 	function html (element, content) {
@@ -106,11 +107,15 @@
 				a: {
 					string: (typeof a === 'string'),
 					number: (typeof a === 'number'),
-					function: (typeof a === 'function')
+					function: (typeof a === 'function'),
+					boolean: (typeof a === 'boolean')
 				},
 				an: {
 					object: (typeof a === 'object' && !(a instanceof Array)),
-					array: (a instanceof Array)
+					array: (a instanceof Array),
+					instanceOf: function (b) {
+						return (a instanceof b);
+					}
 				},
 				true: (a === true),
 				truthy: (!!a),
@@ -184,6 +189,16 @@
 	|  API  |
 	\* -=- */
 	window.describe = function (description, handler) {
+		if (!document.body) {
+			var args = arguments;
+
+			setTimeout(function(){
+				window.describe.apply(null, args);
+			}, 250);
+
+			return;
+		}
+
 		if (describe_depth === 0) {
 			onStart();
 			print(h2(description));
@@ -229,5 +244,9 @@
 		css.type = 'text/css';
 		css.innerHTML = BODY_CSS;
 		document.getElementsByTagName('head')[0].appendChild(css);
+
+		$output = document.createElement('div');
+		$output.id = 'testy';
+		document.body.appendChild($output);
 	};
 })();

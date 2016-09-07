@@ -21,8 +21,15 @@
 						assert(that("Hello").is.a.string);
 						assert(that(1).is.a.number);
 						assert(that(function(){}).is.a.function);
+						assert(that(true).is.a.boolean);
 						assert(that({}).is.an.object);
 						assert(that([]).is.an.array);
+					});
+				});
+
+				describe('Instance checking', function () {
+					it('Should compare instances against constructors', function () {
+						assert(that([1, 2, 3]).is.an.instanceOf(Array));
 					});
 				});
 
