@@ -29,10 +29,6 @@
 		return document.getElementById(element);
 	}
 
-	function print (output) {
-		document.write(output + '<br />');
-	}
-
 	function h2 (message) {
 		return H2_TAG.replace('{*}', message);
 	}
@@ -51,6 +47,14 @@
 
 	function br () {
 		return BR_TAG;
+	}
+
+	function print (output) {
+		document.write(output + br());
+	}
+
+	function html (element, content) {
+		element.innerHTML = content;
 	}
 
 	/* -============- *\
@@ -90,10 +94,6 @@
 		return a === b;
 	}
 
-	function not (a, b) {
-		return a !== b;
-	}
-
 	function that (a) {
 		return {
 			equals: function (b) {
@@ -101,7 +101,7 @@
 			},
 			is: {
 				not: function (b) {
-					return not(a, b);
+					return !equal(a, b);
 				},
 				a: {
 					string: (typeof a === 'string'),
@@ -153,6 +153,13 @@
 		return assert_errors.length === 0;
 	}
 
+	function runTime () {
+		return Date.now() - timer;
+	}
+
+	/* -====- *\
+	|  EVENTS  |
+	\* -====- */
 	function onStart () {
 		timer = Date.now();
 		print(div('timer') + div('failures'));
@@ -169,8 +176,8 @@
 	}
 
 	function onComplete () {
-		e('timer').innerHTML = total_assertions + ' tests run in: ' + (Date.now() - timer) + 'ms';
-		e('failures').innerHTML = 'Failures: ' + span((isPassing() ? PASS_COLOR : FAIL_COLOR), total_failures);
+		html(e('timer'), total_assertions + ' tests run in: ' + runTime() + 'ms');
+		html(e('failures'), 'Failures: ' + span((isPassing() ? PASS_COLOR : FAIL_COLOR), total_failures));
 	}
 
 	/* -=- *\
