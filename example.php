@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<script src="testy.js"></script>
+		<script src="testy.min.js"></script>
 
 		<script>
 			describe('Testy', function () {
